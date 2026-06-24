@@ -157,4 +157,97 @@ jnp.where for Step 8:
                     log_probs.at[i].set(log_prob_z),
                     log_probs)
 
+---
 
+## Questions That Must Be Answered Before Coding
+
+These were answered during design. Recorded here as a reference.
+
+**Q1: What JAX operation computes Part B without a Python loop?**
+
+Part B for walker i is Σ_{k≠i} q(x_i|x_k).
+In matrix form:
+  - Compute full (N x N) matrix M where M[i,k] = log_q(x_i, x_k)
+  - Set diagonal to -inf (excludes k==i term)
+  - Row-wise logsumexp gives log Part B for each i
+  JAX operation: jax.scipy.special.logsumexp(M, axis=1)
+  where diagonal has been masked with -inf
+
+**Q2: What exactly changes between Z(x,z) and Z(x',xᵢ)?**
+
+Z(x,z):
+  ensemble = x = (x_0, ..., x_N)
+  query point = z
+  pairwise matrix M[i,k] = log_q(x_i, x_k), diagonal masked
+  Part A vector: log_q(x_i, z) for each i
+
+Z(x',xᵢ):
+  ensemble = x' where x'_i = z, x'_k = x_k for k≠i
+  query point = x_i (old position)
+  pairwise matrix M'[r,k] = log_q(x'_r, x'_k), diagonal masked
+    — row i changes: x'_i = z so M'[i,k] = log_q(z, x_k)
+    — col i changes: M'[r,i] = log_q(x'_r, z)
+  Part A vector: log_q(x'_r, x_i) for each r
+
+**Q3: Is the lax.scan carry correct?**
+
+carry = (walkers, log_probs, key)
+shapes = ((N, dim), (N,), (2,))
+output per step = walkers shape (N, dim)
+
+Yes this is correct.
+To track teleportation events, add to output:
+  (walkers, accepted, teleported)
+  shapes: ((N, dim), (), ())
+  teleported = (i != j) after accept step
+
+**Q4: How is weighted categorical sampling done in JAX?**
+
+jax.random.categorical(key, logits)
+  - logits = log_w (the unnormalized log weights from Step 3)
+  - internally applies logsumexp normalization
+  - returns integer index in {0, ..., N-1}
+  - no manual softmax or CDF needed
+
+---
+
+## Verification Plan
+
+After implementation, verify in this exact order:
+
+1. compute_log_weights() in isolation
+   - Input: 5 walkers, known positions, Gaussian proposal
+   - Compute by hand for N=2 case
+   - Assert JAX output matches hand calculation
+
+2. Single step on N=2 walkers
+   - Verify output shape is correct
+   - Verify accepted is bool
+   - Verify teleported is bool
+   - Verify when walkers are far apart: reduces to standard MH
+
+3. Full scan on 2D Gaussian (unimodal)
+   - 50 walkers, 5000 steps, burn-in 500
+   - Assert mean within atol=0.1 of [2.0, -1.0]
+   - Assert cov within atol=0.1 of [[1.0,0.8],[0.8,1.0]]
+   - Assert results match Anna Zhang reference on same seed
+
+4. Full scan on double-well (bimodal)
+   - 20 walkers, 5000 steps, all initialized at left mode
+   - Assert both modes populated
+   - Assert plain GW fails same test
+
+---
+
+## Open Questions
+
+These will be resolved during implementation:
+
+- [ ] Does jnp.where work correctly when i is a traced integer 
+      index into walkers? Need to verify walkers.at[i].set(z) 
+      inside jit.
+- [ ] Is the reverse move Z(x',xᵢ) computed correctly when 
+      position i in the ensemble has already been updated to z?
+      Must be careful about order of operations.
+- [ ] What happens when N=1? Should reduce to standard MH.
+      Verify this edge case explicitly.
