@@ -1,1 +1,22 @@
-# placeholder
+cff-version: 1.2.0
+message: "If you use this software, please cite both the paper and this implementation."
+authors:
+  - family-names: Premkumar
+    given-names: Harish
+title: "teleport-mcmc: GPU-Accelerated Ensemble MCMC with Teleporting Walkers in JAX"
+version: 0.1.0
+date-released: 2026-06-24
+url: "https://github.com/thunderbolt190/teleport-mcmc"
+references:
+  - type: article
+    authors:
+      - family-names: Lindsey
+        given-names: Michael
+      - family-names: Weare
+        given-names: Jonathan
+      - family-names: Zhang
+        given-names: Anna
+    title: "Ensemble Markov Chain Monte Carlo with Teleporting Walkers"
+    journal: "SIAM/ASA Journal on Uncertainty Quantification"
+    year: 2022
+    url: "https://arxiv.org/abs/2106.02686"
