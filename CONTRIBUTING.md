@@ -2,7 +2,7 @@
 
 ## Development Setup
 ```bash
-git clone https://github.com/[yourusername]/teleport-mcmc
+git clone https://github.com/thunderbolt190/teleport-mcmc
 cd teleport-mcmc
 pip install -e ".[dev]"
 ```
