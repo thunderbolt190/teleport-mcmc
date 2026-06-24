@@ -29,3 +29,6 @@ benchmarks = [
 [project.urls]
 Homepage = "https://github.com/thunderbolt190/teleport-mcmc"
 Paper = "https://arxiv.org/abs/2106.02686"
+
+[tool.hatch.build.targets.wheel]
+packages = ["teleport"]
