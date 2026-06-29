@@ -11,6 +11,6 @@ def test_weights_function():
   sigma = 1.0
   log_w = compute_log_weights(walkers, log_probs, z, sigma)
 
-  actual = [0.01815, 0.07889]
+  actual = jnp.array([0.01815, 0.07889])
 
   assert jnp.allclose(log_w, actual, atol=1e-4)
