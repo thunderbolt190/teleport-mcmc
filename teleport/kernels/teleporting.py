@@ -27,3 +27,17 @@ def one_teleporting_step(walkers, log_probs, log_prob_fn, step_size, key):
   log_probs = jnp.where(accepted, poss_log_probs, log_probs)
 
   return walkers, log_probs, key, accepted, teleported
+
+
+def teleporting_walkers_jax(init_walkers, log_prob_fn, step_size, n_steps, key):
+  def step_func(carry, _):
+    walkers, log_probs, key = carry
+    walkers, log_probs, key, accepted, teleported = one_teleporting_step(walkers, log_probs, log_prob_fn, step_size, key)
+    carry = (walkers, log_probs, key)
+    return carry, (walkers, accepted, teleported)
+  
+  init_log_probs = jax.vmap(log_prob_fn)(init_walkers)
+  init_carry = (init_walkers, init_log_probs, key)
+
+  (final_walkers, final_lp, _), (chain, accepts, teleports) = jax.lax.scan(step_func, init_carry, xs = None, length = n_steps)
+  return final_walkers, chain, accepts, teleports
