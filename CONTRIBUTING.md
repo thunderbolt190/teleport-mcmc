@@ -1,11 +1,11 @@
 # Contributing
 
 ## Development Setup
+```
 git clone https://github.com/thunderbolt190/teleport-mcmc
 cd teleport-mcmc
 pip install -e ".[dev]"
-
-
+```
 ## Running in Google Colab
 ```
 !git clone https://github.com/thunderbolt190/teleport-mcmc
@@ -13,13 +13,11 @@ pip install -e ".[dev]"
 !pip install -e ".[dev]"
 !pytest tests/ -v
 ```
-
 ## After installation, enable double precision (important for this project)
 ```
 import jax
 jax.config.update("jax_enable_x64", True)
 ```
-  
 ## Running Tests
 ```bash
 pytest tests/ -v
