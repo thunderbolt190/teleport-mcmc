@@ -40,3 +40,31 @@ def test_teleporting_walkers_jax_function():
   assert teleports.shape == (5,)
   assert not jnp.any(jnp.isnan(chain))
   assert not jnp.any(jnp.isnan(walkers))
+
+def test_2d_gaussian_teleporting_walkers():
+  mean = jnp.array([2.0, -1.0])
+  cov = jnp.array([[1.0, 0.8], [0.8, 1.0]])
+  covinv = jnp.linalg.inv(cov)
+
+  def log_prob_jax(x):
+    diff = x - mean
+    return -0.5 * diff.T @ covinv @ diff
+
+  key = jax.random.PRNGKey(42)
+  key1, key2 = jax.random.split(key)
+
+  walkers = jax.random.normal(key1, shape=(50, 2))
+  step_size = 0.5
+  n_steps = 5000
+  burnin = 500
+  dim = 2
+
+  final_walkers, chain, accepts, teleports = teleporting_walkers_jax(walkers, log_prob_jax, step_size, n_steps, key2)
+
+  valid_samples = chain[burnin:].reshape(-1, 2)
+  sample_mean = jnp.mean(valid_samples, axis = 0)
+  sample_cov = jnp.cov(valid_samples, rowvar = False)
+
+  assert jnp.allclose(sample_mean, mean, atol = 0.1)
+  assert jnp.allclose(sample_cov, cov, atol = 0.1)
+
