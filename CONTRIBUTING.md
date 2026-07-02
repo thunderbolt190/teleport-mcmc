@@ -1,11 +1,10 @@
 # Contributing
 
 ## Development Setup
-```bash
 git clone https://github.com/thunderbolt190/teleport-mcmc
 cd teleport-mcmc
 pip install -e ".[dev]"
-```
+
 
 ## Running in Google Colab
 ```
