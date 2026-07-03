@@ -41,6 +41,7 @@ def test_teleporting_walkers_jax_function():
   assert not jnp.any(jnp.isnan(chain))
   assert not jnp.any(jnp.isnan(walkers))
 
+
 def test_2d_gaussian_teleporting_walkers():
   mean = jnp.array([2.0, -1.0])
   cov = jnp.array([[1.0, 0.8], [0.8, 1.0]])
@@ -68,3 +69,20 @@ def test_2d_gaussian_teleporting_walkers():
   assert jnp.allclose(sample_mean, mean, atol = 0.1)
   assert jnp.allclose(sample_cov, cov, atol = 0.1)
 
+
+def test_double_well_teleporting_walkers():
+  def log_prob_doublewell(x):
+    return -4.0 * (x**4 - x**2)
+
+  key = jax.random.PRNGKey(42)
+  key, subkey = jax.random.split(key)
+  walkers = -0.707 + 0.1 * jax.random.normal(subkey, shape=(20, 1))
+
+  n_steps = 5000
+  step_size = 0.5
+
+  final_walkers, chain, accepts, teleports = teleporting_walkers_jax(walkers, log_prob_doublewell, step_size, n_steps, key)
+  valid_samples = chain[500:].reshape(-1, 1)
+  right_mode = jnp.mean(valid_samples > 0)
+  assert right_mode > 0.05 
+  assert right_mode < 0.95 
