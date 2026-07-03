@@ -18,7 +18,8 @@ def one_teleporting_step(walkers, log_probs, log_prob_fn, step_size, key):
   poss_walkers = walkers.at[i].set(z)
   poss_log_probs = log_probs.at[i].set(log_prob_fn(z))
 
-  log_Z_prime = jax.scipy.special.logsumexp(compute_log_weights(poss_walkers, poss_log_probs, walkers[i], step_size))
+  delete = jnp.take(walkers, i, axis=0).squeeze()
+  log_Z_prime = jax.scipy.special.logsumexp(compute_log_weights(poss_walkers, poss_log_probs, delete, step_size))
   teleported = (i != j)
 
   log_accept = log_Z - log_Z_prime
