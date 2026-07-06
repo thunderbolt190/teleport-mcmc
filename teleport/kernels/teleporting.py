@@ -8,7 +8,8 @@ def one_teleporting_step(walkers, log_probs, log_prob_fn, step_size, key):
   dim = walkers.shape[1]
   key, subkey0, subkey1, subkey2, subkey3 = jax.random.split(key, 5)
   j = jax.random.randint(subkey0, shape=(), minval=0, maxval=N)
-  z = walkers[j] + step_size * jax.random.normal(subkey1, shape=(dim,))
+  z = jnp.take(walkers, j, axis=0).squeeze()
+  z = jnp.atleast_1d(z) + step_size * jax.random.normal(subkey1, shape=(dim,))
   
   log_w = compute_log_weights(walkers, log_probs, z, step_size)
   log_Z = jax.scipy.special.logsumexp(log_w)
