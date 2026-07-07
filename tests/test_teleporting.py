@@ -3,6 +3,7 @@ import jax
 import jax.numpy as jnp
 from teleport.kernels.teleporting import one_teleporting_step
 from teleport.kernels.teleporting import teleporting_walkers_jax
+from teleport.targets import log_prob_doublewell
 jax.config.update("jax_enable_x64", True)
 
 def test_one_teleporting_step_function():
@@ -71,9 +72,6 @@ def test_2d_gaussian_teleporting_walkers():
 
 
 def test_double_well_teleporting_walkers():
-  def log_prob_doublewell(x):
-    return -4.0 * (x**4 - x**2)
-
   key = jax.random.PRNGKey(42)
   key, subkey = jax.random.split(key)
   walkers = -0.707 + 0.1 * jax.random.normal(subkey, shape=(20, 1))
