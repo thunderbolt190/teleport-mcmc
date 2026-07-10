@@ -28,7 +28,7 @@ Step 2: Sample z ~ q(·|x_j)
 Step 3: Compute log importance weights for all walkers
   For each i:
     log_w_i = log[ q(x_i|z) + Σ_{k≠i} q(x_i|x_k) ] - log π(x_i)
-  Z_xz = logsumexp(log_w)   ← this is log Z(x,z)
+  Z_xz = logsumexp(log_w)  - this is log Z(x,z)
 
 Step 4: Sample i ~ categorical(softmax(log_w))
   key, subkey = jax.random.split(key)
@@ -42,13 +42,13 @@ Step 5: Form proposed ensemble x'
 Step 6: Compute log Z(x', x_i) — the reverse move weights
   Same formula as Step 3 but:
     - ensemble is now x' (position i replaced by z)
-    - the "proposed point" is x_i (the old position being deleted)
+    - the proposed point is x_i (the old position being deleted)
   Z_x'xi = logsumexp(log_w_reverse)
 
 Step 7: Accept/reject
   log_accept_prob = Z_xz - Z_x'xi
   key, subkey = jax.random.split(key)
-  accepted = log(uniform()) < log_accept_prob
+  accepted = log(jax.random.uniform(key)) < log_accept_prob
 
 Step 8: Update state
   if accepted:
@@ -91,7 +91,7 @@ Part B requires summing over all k≠i for each i.
 This is an (N x N) computation — every pair of walkers.
 In JAX this is done with vmap, not a Python loop.
 
-Numerical stability — CRITICAL:
+Numerical stability:
   Never compute exp(log_w_i) directly then sum.
   Always use log-sum-exp:
     log Σ exp(aᵢ) = max(a) + log Σ exp(aᵢ - max(a))
