@@ -38,9 +38,9 @@ Assertions passed with atol=0.1
 
 
 ## Phase 2 — IAT vs N, Double-Well Target (Table 1 style check)
-Date: 2026-01-11
+Date: 2026-07-11
 Settings: step_size=0.5, n_steps=20000, burn-in=2000, 10 random seeds per N
-Target: Double-well target. This is a 
+Target: Double-well target (not the paper's actual Table 1 target - Guassian process regression posterior). This is a 
 Table-1-style efficiency check on our own already-validated target;
 see Issue #7 for full reasoning.
 
@@ -53,7 +53,7 @@ see Issue #7 for full reasoning.
 ![IAT vs N](results/iat_vs_n_doublewell.png)
 
 **Result:** IAT decreases monotonically with N (confirmed across 10
-seeds). Ratio IAT(1)/IAT(50) ≈ 5.2x — below the 10-30x range originally
+seeds). Ratio IAT(1)/IAT(50) ≈ 5.2x which is below the 10-30x range originally
 targeted (that range was borrowed from the paper's GP regression case,
 not grounded in double-well data). N=10 and N=50 means overlap within
 one std, suggesting most of the benefit of teleporting is captured by
