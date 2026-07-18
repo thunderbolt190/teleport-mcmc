@@ -7,7 +7,7 @@ Stage 4.
 
 ---
 
-## One Full Step — Pseudocode
+## One Full Step
 
 Input:
   walkers    — current positions, shape (N, dim)
@@ -66,7 +66,7 @@ Output:
 
 ---
 
-## The Numerically Hard Part — Importance Weights
+## Importance Weights
 
 For fixed ensemble x and proposed point z, the log importance weight 
 for walker i is:
@@ -89,7 +89,7 @@ For Gaussian proposal q(y|x) = N(y; x, σ²I):
 
 Part B requires summing over all k≠i for each i.
 This is an (N x N) computation — every pair of walkers.
-In JAX this is done with vmap, not a Python loop.
+In JAX this is done via broadcasting (pairwisr differences computed with Numpy-style broadcasting: walkers[:, None, :] - walkers[None, :, :], instead fo a python loop
 
 Numerical stability:
   Never compute exp(log_w_i) directly then sum.
