@@ -250,7 +250,6 @@ Thesewere verified and resolved during implementation:
 - [x] What happens when N=1? Should reduce to standard MH.
       Verify this edge case explicitly.
       Resolved: Confirmed both analytically and empirically.
-
       Analytically: at N=1, the pairwise matrix M is 1x1 with its only
       entry being -inf, so
       log_w = log q(x0|z) - log pi(x0). By proposal symmetry,
