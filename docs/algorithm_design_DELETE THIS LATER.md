@@ -89,7 +89,7 @@ For Gaussian proposal q(y|x) = N(y; x, σ²I):
 
 Part B requires summing over all k≠i for each i.
 This is an (N x N) computation — every pair of walkers.
-In JAX this is done via broadcasting (pairwisr differences computed with Numpy-style broadcasting: walkers[:, None, :] - walkers[None, :, :], instead fo a python loop
+In JAX this is done via broadcasting (pairwise differences computed with Numpy-style broadcasting: walkers[:, None, :] - walkers[None, :, :], instead fo a python loop
 
 Numerical stability:
   Never compute exp(log_w_i) directly then sum.
