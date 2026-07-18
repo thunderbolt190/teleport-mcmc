@@ -239,9 +239,9 @@ After implementation, verify in this exact order:
 
 ---
 
-## Verified Implmentations Details
+## Verified Implementations Details
 
-These will be resolved during implementation:
+Thesewere verified and resolved during implementation:
 
 - [x] Does jnp.where work correctly when i is a traced integer 
       index into walkers? Need to verify walkers.at[i].set(z) 
