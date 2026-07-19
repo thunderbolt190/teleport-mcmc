@@ -3,6 +3,9 @@
 ## Purpose
 This document defines exactly what will be implemented. It serves as the reference for correctness checks during implementation and testing.
 
+An earlier draft of this design, written independently before this
+document was revised, is preserved at
+`docs/archive/algorithm_design_v1_draft.md` for reference.
 ---
 
 ## One Full Step
