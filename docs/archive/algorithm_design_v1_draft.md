@@ -39,4 +39,3 @@ def one_step(walkers, log_probs, log_prob_fn, key, step_size):
     teleported = (i != j)
     return walkers, log_probs, key, accepted, teleported
 ``` 
-```
