@@ -1,6 +1,6 @@
 # Verification and Benchmark Results
 
-## Stage 3 Baseline — RWMH JAX
+## Phase 1 Baseline — RWMH JAX
 
 Date: 2026-06-24
 Settings: 50000 steps, burn-in 1000, step_size=1.0, key=PRNGKey(0)
@@ -19,7 +19,7 @@ Assertions passed with atol=0.1
 
 ---
 
-## Stage 3 Baseline — Goodman-Weare JAX
+## Phase 1 Baseline — Goodman-Weare JAX
 
 Date: 2026-06-24
 Settings: 50 walkers, 2000 steps, burn-in 200, key=PRNGKey(0)
