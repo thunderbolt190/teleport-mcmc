@@ -20,6 +20,6 @@ This document provides the theoretical foundation for the teleporting MCMC algor
 
 ## Key References
 
-- Lindsey, M., Weare, J., & Zhang, A. (2022). "Teleporting Walkers in MCMC: A New Approach to High-Dimensional Sampling."  
+- Lindsey, M., Weare, J., & Zhang, A. (2022). "Ensemble Markov Chain Monte Carlo with Teleporting Walkers."  
   *SIAM/ASA Journal on Uncertainty Quantification*.  
   [arXiv:2106.02686](https://arxiv.org/abs/2106.02686)
