@@ -2,6 +2,7 @@ import jax
 import jax.numpy as jnp
 jax.config.update("jax_enable_x64", True)
 
+@jax.jit
 def compute_log_weights(walkers, log_probs, z, sigma):
   N = walkers.shape[0]
   diff = walkers[:, None, :] - walkers[None, :, :]
