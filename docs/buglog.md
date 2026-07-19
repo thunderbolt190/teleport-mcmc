@@ -10,7 +10,7 @@ Running record of issues found during development, how they were caught, and how
 
 **Problem:** Table 1 in the paper (Section 5.2.1) reports IAT for the **univariate Gaussian process regression posterior** (θ = α, ρ, σ, Cauchy⁺(0,3) priors) — not the double-well target. The double-well example in the paper (Section 5.1) is only used to show PDE convergence (Figures 5.1–5.3); it never reports an IAT table. The original task conflated two separate experiments.
 
-**Resolution:** Retargeted Issue #7 to be an honestly-labeled **Table-1-style efficiency check on double-well** rather than a literal reproduction, with the distinction stated explicitly in the issue, the notebook, and `benchmarks/results.md`.
+**Resolution:** Rewrote Issue #7 to be a **Table-1-style efficiency check on double-well** rather than a literal reproduction, with the distinction stated explicitly in the issue, the notebook, and `benchmarks/results.md`.
 
 **Status:** Resolved.
 
