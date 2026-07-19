@@ -98,8 +98,8 @@ Numerical stability:
 
 The full weight computation in matrix form:
   - Compute all pairwise log_q(x_i, x_k) → shape (N, N) matrix
-  - Diagonal entries (i==k) are excluded from Part B
-  - Part A adds log_q(x_i, z) for each i → shape (N,) vector
+  - Diagonal entries (i==k) are excluded from the crowding term
+  - The proposal term adds log_q(x_i, z) for each i → shape (N,) vector
   - Combine using log-sum-exp for numerical stability
   - Subtract log_probs → shape (N,) vector of log weights
 
@@ -161,13 +161,13 @@ jnp.where for Step 8:
 
 These were answered during design. Recorded here as a reference.
 
-**Q1: What JAX operation computes Part B without a Python loop?**
+**Q1: What JAX operation computes the crowding term without a Python loop?**
 
-Part B for walker i is Σ_{k≠i} q(x_i|x_k).
+the crowding term for walker i is Σ_{k≠i} q(x_i|x_k).
 In matrix form:
   - Compute full (N x N) matrix M where M[i,k] = log_q(x_i, x_k)
   - Set diagonal to -inf (excludes k==i term)
-  - Row-wise logsumexp gives log Part B for each i
+  - Row-wise logsumexp gives log the crowding term for each i
   JAX operation: jax.scipy.special.logsumexp(M, axis=1)
   where diagonal has been masked with -inf
 
@@ -177,7 +177,7 @@ Z(x,z):
   ensemble = x = (x_0, ..., x_N)
   query point = z
   pairwise matrix M[i,k] = log_q(x_i, x_k), diagonal masked
-  Part A vector: log_q(x_i, z) for each i
+  the proposal term vector: log_q(x_i, z) for each i
 
 Z(x',xᵢ):
   ensemble = x' where x'_i = z, x'_k = x_k for k≠i
@@ -185,7 +185,7 @@ Z(x',xᵢ):
   pairwise matrix M'[r,k] = log_q(x'_r, x'_k), diagonal masked
     — row i changes: x'_i = z so M'[i,k] = log_q(z, x_k)
     — col i changes: M'[r,i] = log_q(x'_r, z)
-  Part A vector: log_q(x'_r, x_i) for each r
+  the proposal term vector: log_q(x'_r, x_i) for each r
 
 **Q3: Is the lax.scan carry correct?**
 
