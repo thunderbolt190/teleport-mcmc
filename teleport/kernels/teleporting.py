@@ -4,7 +4,7 @@ from teleport.utils.weights import compute_log_weights
 from functools import partial
 jax.config.update("jax_enable_x64", True)
 
-@partial(jax.jit, statis_argnums=(2,))
+@partial(jax.jit, static_argnums=(2,))
 def one_teleporting_step(walkers, log_probs, log_prob_fn, step_size, key):
   N = walkers.shape[0]
   dim = walkers.shape[1]
@@ -34,7 +34,7 @@ def one_teleporting_step(walkers, log_probs, log_prob_fn, step_size, key):
   return walkers, log_probs, key, accepted, teleported
 
 
-@partial(jax.jit, statis_argnums=(1, 3))
+@partial(jax.jit, static_argnums=(1, 3))
 def teleporting_walkers_jax(init_walkers, log_prob_fn, step_size, n_steps, key):
   def step_func(carry, _):
     walkers, log_probs, key = carry
