@@ -216,32 +216,31 @@ jax.random.categorical(key, logits)
 After implementation, verify in this exact order:
 
 1. compute_log_weights() in isolation
-   - Input: 5 walkers, known positions, Gaussian proposal
-   - Compute by hand for N=2 case
-   - Assert JAX output matches hand calculation
+   - [x] Input: 5 walkers, known positions, Gaussian proposal
+   - [x] Compute by hand for N=2 case
+   - [x] Assert JAX output matches hand calculation
 
 2. Single step on N=2 walkers
-   - Verify output shape is correct
-   - Verify accepted is bool
-   - Verify teleported is bool
-   - Verify when walkers are far apart: reduces to standard MH
+   - [x] Verify output shape is correct
+   - [x] Verify accepted is bool
+   - [x] Verify teleported is bool
+   - [ ] Verify when walkers are far apart: reduces to standard MH
 
 3. Full scan on 2D Gaussian (unimodal)
-   - 50 walkers, 5000 steps, burn-in 500
-   - Assert mean within atol=0.1 of [2.0, -1.0]
-   - Assert cov within atol=0.1 of [[1.0,0.8],[0.8,1.0]]
-   - Assert results match Anna Zhang reference on same seed
+   - [x] 50 walkers, 5000 steps, burn-in 500
+   - [x] Assert mean within atol=0.1 of [2.0, -1.0]
+   - [x] Assert cov within atol=0.1 of [[1.0,0.8],[0.8,1.0]]
 
 4. Full scan on double-well (bimodal)
-   - 20 walkers, 5000 steps, all initialized at left mode
-   - Assert both modes populated
-   - Assert plain GW fails same test
+   - [x] 20 walkers, 5000 steps, all initialized at left mode
+   - [x] Assert both modes populated
+   - [ ] Assert plain GW fails same test
 
 ---
 
 ## Verified Implementations Details
 
-Thesewere verified and resolved during implementation:
+These were verified and resolved during implementation:
 
 - [x] Does jnp.where work correctly when i is a traced integer 
       index into walkers? Need to verify walkers.at[i].set(z) 
