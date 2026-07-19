@@ -18,7 +18,7 @@ Running record of issues found during development, how they were caught, and how
 
 ## 2. Indexing convention inconsistency in `one_teleporting_step`
 
-**Found:** while verifying a documented convention that dynamic indexing inside lax.scan should use jnp.take().squeeze().atleast_1d(), not direct indexing.
+**Found:** while verifying a documented convention that dynamic indexing inside `lax.scan` should use `jnp.take().squeeze().atleast_1d()`, not direct indexing.
 
 **Problem:** Only the delete-extraction line used the documented pattern; `z = walkers[j] + ...` still used direct indexing. No live bug reproduced empirically, but the code was inconsistent with its own documented convention.
 
