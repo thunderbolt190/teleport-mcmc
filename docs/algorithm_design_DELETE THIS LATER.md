@@ -2,8 +2,7 @@
 
 ## Purpose
 This document defines exactly what will be implemented before any code 
-is written. It serves as the reference for correctness checks throughout 
-Stage 4.
+is written. It serves as the reference for correctness checks during implementation and testing.
 
 ---
 
@@ -75,11 +74,11 @@ for walker i is:
 
 The term inside the log has two parts:
 
-  Part A: q(x_i|z)
+  Proposal Term: q(x_i|z)
     How likely is x_i given the new proposal z?
     Intuition: high if x_i is close to z
 
-  Part B: Σ_{k≠i} q(x_i|x_k)
+  Crowding Term: Σ_{k≠i} q(x_i|x_k)
     How likely is x_i given each other walker?
     Intuition: high if x_i is close to many other walkers
     This is what makes crowded walkers likely to be deleted
@@ -87,7 +86,7 @@ The term inside the log has two parts:
 For Gaussian proposal q(y|x) = N(y; x, σ²I):
   log q(y|x) = -0.5 * ||y - x||² / σ²  (constant dropped, cancels in ratio)
 
-Part B requires summing over all k≠i for each i.
+The crowding term requires summing over all k≠i for each i.
 This is an (N x N) computation — every pair of walkers.
 In JAX this is done via broadcasting (pairwise differences computed with Numpy-style broadcasting: walkers[:, None, :] - walkers[None, :, :], instead of a python loop
 
@@ -125,7 +124,6 @@ What changes between Z(x,z) and Z(x',xᵢ):
 
 This is not a full recomputation from scratch.
 Only the entries involving index i change.
-This is an optimization opportunity in Stage 4 implementation.
 
 ---
 
