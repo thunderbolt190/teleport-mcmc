@@ -1,5 +1,10 @@
 # Verification and Benchmark Results
 
+*Phase 1 = core algorithm implementation and baseline sampler
+verification. Phase 2 = scientific credibility work (reproducing/
+comparing against the original paper's results). See the project's
+GitHub issues for the full phase breakdown.*
+
 ## Phase 1 Baseline — RWMH JAX
 
 Date: 2026-06-24
