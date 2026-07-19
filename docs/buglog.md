@@ -28,7 +28,7 @@ Running record of issues found during development, how they were caught, and how
 
 ---
 
-## 3. `log_prob_doublewell` missing scalar reduction — **real, previously-hidden bug**
+## 3. `log_prob_doublewell` missing scalar reduction — **previously-hidden bug**
 
 **Found:** during notebook Step 2, when `teleports.shape` came back `(5000, 20)` instead of `(5000,)`.
 
