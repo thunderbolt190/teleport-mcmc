@@ -1,8 +1,7 @@
 # Teleporting Walkers — Algorithm Design Document
 
 ## Purpose
-This document defines exactly what will be implemented before any code 
-is written. It serves as the reference for correctness checks during implementation and testing.
+This document defines exactly what will be implemented. It serves as the reference for correctness checks during implementation and testing.
 
 ---
 
