@@ -71,16 +71,7 @@ Verified independently: full suite re-passes, `teleports.shape` confirmed correc
 
 ---
 
-## 6. Repo hygiene
-
-- Stray placeholder notebook file and `docs/algorithm_design_DELETE THIS LATER.md` — both cleaned up. Design doc renamed/merged into `docs/algorithm_design.md`; original first-draft pseudocode preserved at `docs/archive/algorithm_design_v1_draft.md` for reference.
-- "Stage" vs "Phase" naming inconsistency between `benchmarks/results.md` and the design doc — reconciled (Stage 3 = Phase 1, confirmed directly from the SDLC doc's own issue-tracking crosswalk); added a legend to `results.md` explaining the phase numbering for readers unfamiliar with it.
-
-**Status:** Resolved.
-
----
-
-## 7. Notebook plot silently saved outside the repo
+## 6. Notebook plot silently saved outside the repo
 
 **Found:** while building `notebooks/03_iat_vs_doublewell.ipynb`, cell 8 (the plot).
 
@@ -92,7 +83,7 @@ Verified independently: full suite re-passes, `teleports.shape` confirmed correc
 
 ---
 
-## 8. Blank plot from save/show ordering in Colab
+## 7. Blank plot from save/show ordering in Colab
 
 **Found:** first attempt at saving the IAT-vs-N plot. The pushed PNG was a valid file but rendered as completely blank.
 
@@ -113,6 +104,5 @@ Verified independently: full suite re-passes, `teleports.shape` confirmed correc
 | 3 | `log_prob_doublewell` missing reduction | **Real correctness bug** | ✅ Resolved |
 | 4 | Design doc: incorrect vmap claim | Documentation | ✅ Resolved |
 | 5 | Design doc: Open Questions | Documentation | ✅ Resolved |
-| 6 | Repo hygiene | Cleanup | ✅ Resolved |
-| 7 | Notebook plot saved outside repo (wrong path) | Real bug (silent) | ✅ Resolved |
-| 8 | Blank plot from save/show ordering | Real bug (silent) | ✅ Resolved |
+| 6 | Notebook plot saved outside repo (wrong path) | Real bug (silent) | ✅ Resolved |
+| 7 | Blank plot from save/show ordering | Real bug (silent) | ✅ Resolved |
