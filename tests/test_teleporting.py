@@ -4,6 +4,7 @@ import jax.numpy as jnp
 from teleport.kernels.teleporting import one_teleporting_step
 from teleport.kernels.teleporting import teleporting_walkers_jax
 from teleport.targets import log_prob_doublewell
+from teleport.targets import log_prob_gaussian2d, GAUSSIAN2d_MEAN, GAUSSIAN2d_COV
 jax.config.update("jax_enable_x64", True)
 
 def test_one_teleporting_step_function():
