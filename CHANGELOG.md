@@ -24,4 +24,4 @@
 
 ### Changed
 - Consolidated the 2D Gaussian target (previously duplicated separately across three test files) into `teleport/targets.py` as `log_prob_gaussian2d`
-- Rewrote `docs/algorithm_design.md` to accurately reflect the implemented code (previously had several inaccuracies — see `docs/BUGLOG.md`); original first draft preserved at `docs/archive/algorithm_design_v1_draft.md`
+- Rewrote `docs/algorithm_design.md` to accurately reflect the implemented code (previously had several inaccuracies); original first draft preserved at `docs/archive/algorithm_design_v1_draft.md`
