@@ -26,3 +26,16 @@ pip install -e ".[dev,benchmarks]"
 
 `dev` includes testing tools (pytest); `benchmarks` includes emcee,
 matplotlib, and numpy, needed to run `notebooks/03_iat_vs_doublewell.ipynb`.
+
+## Usage
+
+```import jax
+from teleport.kernels.teleporting import teleporting_walkers_jax
+from teleport.targets import log_prob_gaussian2d
+
+key = jax.random.PRNGKey(0)
+walkers = jax.random.normal(key, shape=(20, 2))
+
+final_walkers, chain, accepts, teleports = teleporting_walkers_jax(
+    walkers, log_prob_gaussian2d, step_size=0.5, n_steps=5000, key=key
+)
