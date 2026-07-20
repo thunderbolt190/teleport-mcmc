@@ -29,7 +29,8 @@ matplotlib, and numpy, needed to run `notebooks/03_iat_vs_doublewell.ipynb`.
 
 ## Usage
 
-```import jax
+```python
+import jax
 from teleport.kernels.teleporting import teleporting_walkers_jax
 from teleport.targets import log_prob_gaussian2d
 
@@ -51,7 +52,7 @@ final_walkers, chain, accepts, teleports = teleporting_walkers_jax(
   samplers implemented and tested (7 passing tests, see `tests/`)
 - Baseline correctness verified against known 2D Gaussian statistics;
   see [`benchmarks/results.md`](benchmarks/results.md)
-- IAT-vs-N efficiency check on the double-well target (Table-1-style); see
+- IAT-vs-N efficiency check on the double-well target (Table 1 style, not a paper reproduction); see
   [`notebooks/03_iat_vs_doublewell.ipynb`](notebooks/03_iat_vs_doublewell.ipynb)
 
 Planned work (paper reproductions, additional benchmarks) is tracked in
