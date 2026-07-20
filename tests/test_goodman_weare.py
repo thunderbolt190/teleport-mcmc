@@ -2,16 +2,12 @@ import pytest
 import jax
 import jax.numpy as jnp
 from teleport.kernels.goodman_weare import goodman_weare_jax
+from teleport.targets import log_prob_gaussian2d, GAUSSIAN2D_MEAN, GAUSSIAN2D_COV
 jax.config.update("jax_enable_x64", True)
 
 def test_goodman_weare():
-  mean = jnp.array([2.0, -1.0])
-  cov = jnp.array([[1.0, 0.8], [0.8, 1.0]])
-  covinv = jnp.linalg.inv(cov)
-
-  def log_prob_jax(x):
-    diff = x - mean
-    return -0.5 * diff.T @ covinv @ diff
+  mean = GAUSSIAN2D_MEAN
+  cov = GAUSSIAN2D_COV
 
   key = jax.random.PRNGKey(0)
   key1, key2 = jax.random.split(key)
@@ -23,7 +19,7 @@ def test_goodman_weare():
 
   init_walkers = jax.random.normal(key1, shape = (n_walkers, dim))
 
-  chain, accept_rate = goodman_weare_jax(log_prob_jax, init_walkers, n_steps, key2, n_walkers)
+  chain, accept_rate = goodman_weare_jax(log_prob_gaussian2d, init_walkers, n_steps, key2, n_walkers)
 
   valid_samples = chain[burnin:].reshape(-1, dim)
   sample_mean = jnp.mean(valid_samples, axis = 0)
