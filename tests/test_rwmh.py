@@ -2,16 +2,12 @@ import pytest
 import jax
 import jax.numpy as jnp
 from teleport.kernels.rwmh import rwmh_jax
+from teleport.targets import log_prob_gaussian2d, GAUSSIAN2D_MEAN, GAUSSIAN2D_COV
 jax.config.update("jax_enable_x64", True)
 
 def test_rwmh():
-  mean = jnp.array([2.0, -1.0])
-  cov = jnp.array([[1.0, 0.8], [0.8, 1.0]])
-  covinv = jnp.linalg.inv(cov)
-
-  def log_prob_jax(x):
-    diff = x - mean
-    return -0.5 * diff.T @ covinv @ diff
+  mean = GAUSSIAN2D_MEAN
+  cov = GAUSSIAN2D_COV
 
   key = jax.random.PRNGKey(0)
   init = jnp.array([0.0, 0.0])
@@ -19,7 +15,7 @@ def test_rwmh():
   step_size = 1.0
   burnin = 1000
 
-  chain, accept_rate = rwmh_jax(log_prob_jax, init, n_steps, step_size, key)
+  chain, accept_rate = rwmh_jax(log_prob_gaussian2d, init, n_steps, step_size, key)
 
   valid_samples = chain[burnin:]
   sample_mean = jnp.mean(valid_samples, axis = 0)
