@@ -43,3 +43,16 @@ final_walkers, chain, accepts, teleports = teleporting_walkers_jax(
 # chain:         (n_steps, N, dim) full trajectory
 # accepts:       (n_steps,) bool, whether each step's proposal was accepted
 # teleports:     (n_steps,) bool, whether each accepted step was a teleport move
+```
+
+## Status
+
+- Core teleporting walkers algorithm, RWMH, and Goodman-Weare baseline
+  samplers implemented and tested (7 passing tests, see `tests/`)
+- Baseline correctness verified against known 2D Gaussian statistics;
+  see [`benchmarks/results.md`](benchmarks/results.md)
+- IAT-vs-N efficiency check on the double-well target (Table-1-style); see
+  [`notebooks/03_iat_vs_doublewell.ipynb`](notebooks/03_iat_vs_doublewell.ipynb)
+
+Planned work (paper reproductions, additional benchmarks) is tracked in
+[GitHub Issues](https://github.com/thunderbolt190/teleport-mcmc/issues).
