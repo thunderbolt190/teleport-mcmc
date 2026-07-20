@@ -4,7 +4,7 @@ import jax.numpy as jnp
 from teleport.kernels.teleporting import one_teleporting_step
 from teleport.kernels.teleporting import teleporting_walkers_jax
 from teleport.targets import log_prob_doublewell
-from teleport.targets import log_prob_gaussian2d, GAUSSIAN2d_MEAN, GAUSSIAN2d_COV
+from teleport.targets import log_prob_gaussian2d, GAUSSIAN2D_MEAN, GAUSSIAN2D_COV
 jax.config.update("jax_enable_x64", True)
 
 def test_one_teleporting_step_function():
@@ -45,13 +45,8 @@ def test_teleporting_walkers_jax_function():
 
 
 def test_2d_gaussian_teleporting_walkers():
-  mean = jnp.array([2.0, -1.0])
-  cov = jnp.array([[1.0, 0.8], [0.8, 1.0]])
-  covinv = jnp.linalg.inv(cov)
-
-  def log_prob_jax(x):
-    diff = x - mean
-    return -0.5 * diff.T @ covinv @ diff
+  mean = GAUSSIAN2D_MEAN
+  cov = GAUSSIAN2D_COV
 
   key = jax.random.PRNGKey(42)
   key1, key2 = jax.random.split(key)
@@ -62,7 +57,7 @@ def test_2d_gaussian_teleporting_walkers():
   burnin = 500
   dim = 2
 
-  final_walkers, chain, accepts, teleports = teleporting_walkers_jax(walkers, log_prob_jax, step_size, n_steps, key2)
+  final_walkers, chain, accepts, teleports = teleporting_walkers_jax(walkers, log_prob_gaussian2d, step_size, n_steps, key2)
 
   valid_samples = chain[burnin:].reshape(-1, 2)
   sample_mean = jnp.mean(valid_samples, axis = 0)
