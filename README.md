@@ -15,3 +15,14 @@ Lindsey, M., Weare, J., & Zhang, A. (2022). "Ensemble Markov Chain Monte
 Carlo with Teleporting Walkers." *SIAM/ASA Journal on Uncertainty
 Quantification*, 10(3), 860–885.
 [arXiv:2106.02686](https://arxiv.org/abs/2106.02686)
+
+## Installation
+
+```bash
+git clone https://github.com/thunderbolt190/teleport-mcmc.git
+cd teleport-mcmc
+pip install -e ".[dev,benchmarks]"
+```
+
+`dev` includes testing tools (pytest); `benchmarks` includes emcee,
+matplotlib, and numpy, needed to run `notebooks/03_iat_vs_doublewell.ipynb`.
