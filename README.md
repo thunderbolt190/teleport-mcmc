@@ -39,3 +39,7 @@ walkers = jax.random.normal(key, shape=(20, 2))
 final_walkers, chain, accepts, teleports = teleporting_walkers_jax(
     walkers, log_prob_gaussian2d, step_size=0.5, n_steps=5000, key=key
 )
+# final_walkers: (N, dim) final ensemble state
+# chain:         (n_steps, N, dim) full trajectory
+# accepts:       (n_steps,) bool, whether each step's proposal was accepted
+# teleports:     (n_steps,) bool, whether each accepted step was a teleport move
