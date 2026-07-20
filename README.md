@@ -56,3 +56,11 @@ final_walkers, chain, accepts, teleports = teleporting_walkers_jax(
 
 Planned work (paper reproductions, additional benchmarks) is tracked in
 [GitHub Issues](https://github.com/thunderbolt190/teleport-mcmc/issues).
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## License
+
+Apache-2.0. See [LICENSE](LICENSE).
