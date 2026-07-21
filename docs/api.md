@@ -8,7 +8,7 @@ Runs the teleporting walkers sampler for `n_steps`.
 
 **Parameters:** 
 - `init_walkers` - array, shape `(N, dim)`: Initial ensemble positions
-- `log_prob_fn` - callable (static): Target probability function. Takes in walker location and returns a scalar.
+- `log_prob_fn` - callable (static): Target log probability function. Takes in walker location and returns a scalar.
 - `step_size` - float: Standard deviation of the Gaussian proposal.
 - `n_steps` - int (static): Number of steps (individual walker moves).
 - `key` - `jax.random.PRNGKey`.
@@ -20,6 +20,7 @@ Runs the teleporting walkers sampler for `n_steps`.
 - `teleports` - shape `(n_steps,)`, bool: Whether each *accepted step moved a
   different walker than the one originally selected to propose from
   (`i != j`), meaning a teleport rather than a local move.
+  
 ---
 
 ### `one_teleporting_step(walkers, log_probs, log_prob_fn, step_size, key)`
@@ -30,7 +31,7 @@ Runs a single step of the algorithm. Used internally by
 **Parameters:**
 - `walkers` - shape `(N, dim)`: Current ensemble.
 - `log_probs` - shape `(N,)`: Current log π(xᵢ) for each walker.
-- `log_prob_fn` - callable (static): Target probability function. Takes in walker location and returns a scalar
+- `log_prob_fn` - callable (static): Target log probability function. Takes in walker location and returns a scalar
 - `step_size` - float: Standard deviation of the Gaussian proposal.
 - `key` - `jax.random.PRNGKey`.
 
@@ -62,7 +63,7 @@ given a proposed point `z`. See `docs/math.md` (or
 Standard Random-Walk Metropolis-Hastings, single chain.
 
 **Parameters:**
-- `log_prob_fn` - callable (static): Target probability function. Takes in walker location and returns a scalar.
+- `log_prob_fn` - callable (static): Target log probability function. Takes in walker location and returns a scalar.
 - `init` - shape `(dim,)`: Starting position of the walker.
 - `n_steps` - int (static): Number of Metropolis-Hastings steps.
 - `step_size` - float: Proposal standard deviation.
@@ -81,7 +82,7 @@ Goodman-Weare affine-invariant ensemble sampler. Note: this implementation updat
 simultaneously via `vmap`, rather than sequentially one at a time.
 
 **Parameters:**
-- `log_prob_fn` - callable (static): Target probability function. Takes in walker location and returns a scalar.
+- `log_prob_fn` - callable (static): Target log probability function. Takes in walker location and returns a scalar.
 - `init_walkers` - shape `(n_walkers, dim)`: Initial locations of all walkers.
 - `n_steps` - int (static): Number of Goodman-Weare steps (Each step proposes new locations for every walker)
 - `key` - `jax.random.PRNGKey`.
