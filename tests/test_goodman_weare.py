@@ -25,6 +25,12 @@ def test_goodman_weare():
   sample_mean = jnp.mean(valid_samples, axis = 0)
   sample_cov = jnp.cov(valid_samples, rowvar = False)
 
+  assert chain.shape == (2000, 50, 2)
+  assert jnp.allclose(sample_mean, mean, atol = 0.1)
+  assert jnp.allclose(sample_cov, cov, atol = 0.1)
+  assert 0.4 < accept_rate < 0.8
+
+
 
 def test_goodman_weare_sequential():
   mean = GAUSSIAN2D_MEAN
@@ -45,7 +51,6 @@ def test_goodman_weare_sequential():
   valid_samples = chain[burnin:].reshape(-1, dim)
   sample_mean = jnp.mean(valid_samples, axis = 0)
   sample_cov = jnp.cov(valid_samples, rowvar = False)
-
 
   assert chain.shape == (2000, 50, 2)
   assert jnp.allclose(sample_mean, mean, atol = 0.1)
