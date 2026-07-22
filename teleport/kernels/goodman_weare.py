@@ -50,3 +50,38 @@ def goodman_weare_jax(log_prob_fn, init_walkers, n_steps, key, n_walkers, a = 2.
   init_carry = (init_walkers, log_probs, key, 0)
   (final_pos, final_lp, _, n_accepted), chain = jax.lax.scan(gw_step, init_carry, xs = None, length = n_steps)
   return chain, n_accepted / (n_walkers * n_steps)
+
+
+@partial(jax.jit, static_argnums = (0, 2, 4))
+def goodman_weare_sequential_jax(log_prob_fn, init_walkers, n_steps, key, n_walkers, a = 2.0):
+  dim = int(init_walkers.shape[1])
+
+  def gw_step(carry, _):
+    def update_walker(carry, _):
+      walkers, log_probs, key, acc_counter, i = carry
+      key, key1, key2, key3 =jax.random.split(key, 4)
+      comp_walker = select_complementary_jax(n_walkers, i, key1)
+      z = sample_stretch_factor_jax(key2, 1, a)[0]
+      proposal = gw_proposal_jax(walkers[i], walkers[comp_walker], z)
+      prop_log_prob = log_prob_fn(proposal)
+      prop_walkers = walkers.at[i].set(proposal)
+      prop_log_probs = log_probs.at[i].set(prop_log_prob)
+      accepted = gw_accept_jax(log_probs[i], prop_log_prob, z, dim, key3)
+      walkers = jnp.where(accepted, prop_walkers, walkers)
+      log_probs = jnp.where(accepted, prop_log_probs, log_probs)
+      acc_counter = jnp.where(accepted, 1, 0) + acc_counter
+      i += 1
+      new_carry = (walkers, log_probs, key, acc_counter, i)
+      return new_carry, None
+
+    walkers, log_probs, key, acc_counter = carry
+    init_carry = (walkers, log_probs, key, acc_counter, 0)
+
+    (new_walkers, new_log_probs, new_key, acc_counter, i), _ = jax.lax.scan(update_walker, init_carry, xs = None, length = n_walkers)
+    new_carry = (new_walkers, new_log_probs, new_key, acc_counter)
+    return new_carry, new_walkers
+
+  log_probs = jax.vmap(log_prob_fn)(init_walkers)
+  init_carry = (init_walkers, log_probs, key, 0)
+  (final_pos, final_lp, _, n_accepted), chain = jax.lax.scan(gw_step, init_carry, xs = None, length = n_steps)
+  return chain, n_accepted / (n_walkers * n_steps)
