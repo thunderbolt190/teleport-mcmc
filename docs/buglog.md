@@ -95,6 +95,29 @@ Verified independently: full suite re-passes, `teleports.shape` confirmed correc
 
 ---
 
+## 8. Goodman-Weare silently produces a frozen walker at N=1
+
+**Found:** while running the teleporting-vs-GW IAT comparison experiment,
+checking whether N=1 could be included as a comparison point.
+
+**Problem:** Both `goodman_weare_jax` and `goodman_weare_sequential_jax`
+require at least one other walker to propose a move — the stretch-move
+formula needs a "complementary" walker to move relative to. With
+`n_walkers=1`, `select_complementary_jax` returns an out-of-bounds index
+(the only other walker's index doesn't exist). JAX's default array
+indexing silently clips out-of-bounds indices rather than raising an
+error, so the complementary walker resolves to the walker itself. This
+makes every proposal identical to the walker's current position.
+
+**Status:** Not fixed. Currently avoided by excluding N=1 from any GW
+comparison and starting at N=2 (the smallest N at which GW is
+well-defined). A proper fix
+would have `goodman_weare_jax`/`goodman_weare_sequential_jax` raise an
+explicit error for `n_walkers < 2`, rather than silently returning
+degenerate results.
+
+---
+
 ## Summary
 
 | # | Issue | Type | Status |
@@ -106,3 +129,4 @@ Verified independently: full suite re-passes, `teleports.shape` confirmed correc
 | 5 | Design doc: Open Questions | Documentation | ✅ Resolved |
 | 6 | Notebook plot saved outside repo (wrong path) | Real bug (silent) | ✅ Resolved |
 | 7 | Blank plot from save/show ordering | Real bug (silent) | ✅ Resolved |
+| 8 | Goodman-Weare frozen walker at N=1 | Correctness bug (silent) | ⚠️ Open — not fixed |
