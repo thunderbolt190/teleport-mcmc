@@ -124,7 +124,7 @@ degenerate results.
 |---|-------|------|--------|
 | 1 | Table 1 target mismatch | Planning/scoping | ✅ Resolved |
 | 2 | Inconsistent indexing pattern | Defensive fix | ✅ Resolved |
-| 3 | `log_prob_doublewell` missing reduction | Correctness big (silent) | ✅ Resolved |
+| 3 | `log_prob_doublewell` missing reduction | Correctness bug (silent) | ✅ Resolved |
 | 4 | Design doc: incorrect vmap claim | Documentation | ✅ Resolved |
 | 5 | Design doc: Open Questions | Documentation | ✅ Resolved |
 | 6 | Notebook plot saved outside repo (wrong path) | Correctness bug (silent) | ✅ Resolved |
