@@ -124,9 +124,9 @@ degenerate results.
 |---|-------|------|--------|
 | 1 | Table 1 target mismatch | Planning/scoping | ✅ Resolved |
 | 2 | Inconsistent indexing pattern | Defensive fix | ✅ Resolved |
-| 3 | `log_prob_doublewell` missing reduction | **correctness bug** | ✅ Resolved |
+| 3 | `log_prob_doublewell` missing reduction | Correctness big (silent) | ✅ Resolved |
 | 4 | Design doc: incorrect vmap claim | Documentation | ✅ Resolved |
 | 5 | Design doc: Open Questions | Documentation | ✅ Resolved |
-| 6 | Notebook plot saved outside repo (wrong path) |  bug (silent) | ✅ Resolved |
-| 7 | Blank plot from save/show ordering | bug (silent) | ✅ Resolved |
+| 6 | Notebook plot saved outside repo (wrong path) | Correctness bug (silent) | ✅ Resolved |
+| 7 | Blank plot from save/show ordering | Correctness bug (silent) | ✅ Resolved |
 | 8 | Goodman-Weare frozen walker at N=1 | Correctness bug (silent) | ⚠️ Open — not fixed |
