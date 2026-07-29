@@ -98,3 +98,39 @@ more seeds or a proper statistical test to resolve. Findings are
 specific to this double-well parameterization (a fairly shallow
 barrier) and don't generalize to other targets. Full methodology and
 discussion in notebooks/04_teleporting_vs_gw.ipynb.
+
+
+## Phase 2 - Acceptance & Teleport Probability vs. N, Double-Well Target
+Date: 2026-07-28
+Settings: n_steps=5000, step_size=0.5, burnin=500, single seed (PRNGKey(42)) per N.
+N = [1, 2, 5, 10, 20, 50, 100] tested. N=1 is included here, since
+teleporting is well-defined at N=1 and reduces to standard MH and the teleport
+probability is expected to be exactly 0 there.
+Target: Double-well target (teleport.targets.log_prob_doublewell). This is a
+double-well analog of Figure 5.5 from the paper; the
+paper's actual Figure 5.5 uses the univariate Gaussian process regression posterior
+from Section 5.2.1, not double-well. Note also that the paper's Figure 5.5 uses a
+linear N-axis, while the plot below uses a log-x-axis since our chosen N values
+aren't evenly spaced.
+
+| N   | Accepted Prob | Teleported Prob | Mode Coverage |
+|-----|---------------|------------------|---------------|
+| 1   | 0.660         | 0.000            | 0.542         |
+| 2   | 0.708         | 0.339            | 0.513         |
+| 5   | 0.806         | 0.771            | 0.493         |
+| 10  | 0.834         | 0.885            | 0.495         |
+| 20  | 0.862         | 0.950            | 0.507         |
+| 50  | 0.891         | 0.979            | 0.493         |
+| 100 | 0.890         | 0.991            | 0.507         |
+
+Mode coverage stayed between 0.493 and 0.542 across all N, confirming these
+acceptance/teleport trends reflect ensemble behavior rather than a stuck ensemble.
+
+![Acceptance and teleport probability vs N](results/accept_teleport_vs_n_doublewell.png)
+
+**Result:** Both acceptance and teleport probability increase with N, qualitatively
+matching the trend the paper describes for Figure 5.5, and both curves appear to
+flatten out by N=50-100 rather than continuing to rise sharply  which is consistent with the
+diminishing-returns pattern already seen in Phase 1. These are single-seed results, so no error bars are
+established and the specific values here should not be compared numerically against
+the paper's own Figure 5.5, which uses a different target. 
