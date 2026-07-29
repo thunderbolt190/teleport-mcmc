@@ -49,11 +49,16 @@ final_walkers, chain, accepts, teleports = teleporting_walkers_jax(
 ## Status
 
 - Core teleporting walkers algorithm, RWMH, and Goodman-Weare baseline
-  samplers implemented and tested (7 passing tests, see `tests/`)
+  samplers implemented and tested (8 passing tests, see `tests/`)
 - Baseline correctness verified against known 2D Gaussian statistics;
   see [`benchmarks/results.md`](benchmarks/results.md)
-- IAT-vs-N efficiency check on the double-well target (Table 1 style, not a paper reproduction); see
+- IAT-vs-N efficiency check on the double-well target; see
   [`notebooks/03_iat_vs_doublewell.ipynb`](notebooks/03_iat_vs_doublewell.ipynb)
+- Teleporting walkers vs. Goodman-Weare comparison on the double-well
+  target; see [`notebooks/04_teleporting_vs_gw.ipynb`](notebooks/04_teleporting_vs_gw.ipynb)
+- Acceptance & teleport probability vs. N, a double-well analog of the
+  paper's Figure 5.5; see
+  [`notebooks/05_accept_teleport_vs_n_doublewell.ipynb`](notebooks/05_accept_teleport_vs_n_doublewell.ipynb)
 
 Planned work (paper reproductions, additional benchmarks) is tracked in
 [GitHub Issues](https://github.com/thunderbolt190/teleport-mcmc/issues).
