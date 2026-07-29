@@ -94,6 +94,13 @@ simultaneously via `vmap`, rather than sequentially one at a time.
 - `accept_rate` - scalar float: Fraction of individual walker updates
   accepted over the full run (normalized by `n_walkers * n_steps`).
 
+### `goodman_weare_sequential_jax(log_prob_fn, init_walkers, n_steps, key, n_walkers, a=2.0)`
+
+Same inputs and outputs as `goodman_weare_jax` above, but updates walkers sequentially
+one at a time within each step; each walker sees the already-updated state of earlier
+walkers in the same sweep, following Goodman & Weare (2010) "Algorithm 2." Distinct from
+`goodman_weare_jax`, which updates all walkers simultaneously via `vmap`.
+
 ## Target Distributions
 
 ### `log_prob_doublewell(x)`
