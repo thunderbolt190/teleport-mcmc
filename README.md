@@ -25,7 +25,10 @@ pip install -e ".[dev,benchmarks]"
 ```
 
 `dev` includes testing tools (pytest); `benchmarks` includes emcee,
-matplotlib, and numpy, needed to run `notebooks/03_iat_vs_doublewell.ipynb`.
+matplotlib, and numpy, needed to run
+`notebooks/03_iat_vs_doublewell.ipynb`,
+`notebooks/04_teleporting_vs_gw.ipynb` and
+`notebooks/05_accept_teleport_vs_n_doublewell.ipynb`.
 
 ## Usage
 
