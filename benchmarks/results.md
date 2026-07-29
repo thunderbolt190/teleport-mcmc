@@ -130,7 +130,7 @@ acceptance/teleport trends reflect ensemble behavior rather than a stuck ensembl
 
 **Result:** Both acceptance and teleport probability increase with N, qualitatively
 matching the trend the paper describes for Figure 5.5, and both curves appear to
-flatten out by N=50-100 rather than continuing to rise sharply  which is consistent with the
+flatten out by N=50-100 rather than continuing to rise sharply which is consistent with the
 diminishing-returns pattern already seen in Phase 1. These are single-seed results, so no error bars are
 established and the specific values here should not be compared numerically against
 the paper's own Figure 5.5, which uses a different target. 
