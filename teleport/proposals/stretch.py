@@ -1,5 +1,6 @@
 import jax
 import jax.numpy as jnp
+from functools import partial
 
 @partial(jax.jit, static_argnums = (1,))
 def sample_stretch_factor_jax(key, n_samples, a = 2.0):
