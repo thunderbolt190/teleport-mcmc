@@ -1,16 +1,8 @@
 import jax
 import jax.numpy as jnp
 from functools import partial
+from teleport.proposals.stretch import sample_stretch_factor_jax, gw_proposal_jax
 jax.config.update("jax_enable_x64", True)
-
-@partial(jax.jit, static_argnums = (1,))
-def sample_stretch_factor_jax(key, n_samples, a = 2.0):
-  u = jax.random.uniform(key, shape = (n_samples,))
-  return (u * (jnp.sqrt(a) - 1/jnp.sqrt(a)) + 1/jnp.sqrt(a)) ** 2
-
-@jax.jit
-def gw_proposal_jax(walker_i, walker_j, z):
-  return walker_j + z * (walker_i - walker_j)
 
 @jax.jit
 def gw_accept_jax(current_log_prob, proposal_log_prob, z, dim, key):
