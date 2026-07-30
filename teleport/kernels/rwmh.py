@@ -1,12 +1,8 @@
 import jax
 import jax.numpy as jnp
 from functools import partial
+from teleport.proposals.gaussian import proposal_step_jax
 jax.config.update("jax_enable_x64", True)
-
-@jax.jit
-def proposal_step_jax(current, step_size, key):
-  noise = step_size * jax.random.normal(key, shape = current.shape)
-  return current + noise
 
 @jax.jit
 def accept_jax(current_log_prob, proposal_log_prob, key):
