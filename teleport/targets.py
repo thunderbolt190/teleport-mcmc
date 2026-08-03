@@ -1,7 +1,7 @@
 import jax.numpy as jnp
 
-def log_prob_doublewell(x):
-    return jnp.sum(-4.0 * (x**4 - x**2))
+def log_prob_doublewell(x, b = 4.0):
+    return jnp.sum(-b * (x**4 - x**2))
 
 GAUSSIAN2D_MEAN = jnp.array([2.0, -1.0])
 GAUSSIAN2D_COV = jnp.array([[1.0, 0.8], [0.8, 1.0]])
