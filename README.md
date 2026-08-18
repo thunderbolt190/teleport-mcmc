@@ -25,10 +25,8 @@ pip install -e ".[dev,benchmarks]"
 ```
 
 `dev` includes testing tools (pytest); `benchmarks` includes emcee,
-matplotlib, and numpy, needed to run
-`notebooks/03_iat_vs_doublewell.ipynb`,
-`notebooks/04_teleporting_vs_gw.ipynb` and
-`notebooks/05_accept_teleport_vs_n_doublewell.ipynb`.
+matplotlib, and numpy, needed to run the experiment notebooks under
+`notebooks/` (double-well studies and paper Examples 5.2.1–5.2.3).
 
 ## Usage
 
@@ -55,16 +53,19 @@ final_walkers, chain, accepts, teleports = teleporting_walkers_jax(
   samplers implemented and tested (8 passing tests, see `tests/`)
 - Baseline correctness verified against known 2D Gaussian statistics;
   see [`benchmarks/results.md`](benchmarks/results.md)
-- IAT-vs-N efficiency check on the double-well target; see
-  [`notebooks/03_iat_vs_doublewell.ipynb`](notebooks/03_iat_vs_doublewell.ipynb)
-- Teleporting walkers vs. Goodman-Weare comparison on the double-well
-  target; see [`notebooks/04_teleporting_vs_gw.ipynb`](notebooks/04_teleporting_vs_gw.ipynb)
-- Acceptance & teleport probability vs. N, a double-well analog of the
-  paper's Figure 5.5; see
-  [`notebooks/05_accept_teleport_vs_n_doublewell.ipynb`](notebooks/05_accept_teleport_vs_n_doublewell.ipynb)
+- Double-well experiments:
+  - IAT vs N - [`notebooks/03_iat_vs_doublewell.ipynb`](notebooks/03_iat_vs_doublewell.ipynb)
+  - Teleporting vs Goodman-Weare - [`notebooks/04_teleporting_vs_gw.ipynb`](notebooks/04_teleporting_vs_gw.ipynb)
+  - Acceptance & teleport probability vs N - [`notebooks/05_accept_teleport_vs_n_doublewell.ipynb`](notebooks/05_accept_teleport_vs_n_doublewell.ipynb)
+- Paper example notebooks (Section 5.2):
+  - 5.2.1 Univariate GP - [`notebooks/Example_5_2_1.ipynb`](notebooks/Example_5_2_1.ipynb)
+  - 5.2.2 Multivariate GP - [`notebooks/Example_5_2_2.ipynb`](notebooks/Example_5_2_2.ipynb)
+  - 5.2.3 Non-Gaussian (Student-t) noise / restricted interaction -
+    [`notebooks/Example_5_2_3.ipynb`](notebooks/Example_5_2_3.ipynb)
 
-Planned work (paper reproductions, additional benchmarks) is tracked in
+Further work is tracked in
 [GitHub Issues](https://github.com/thunderbolt190/teleport-mcmc/issues).
+
 
 ## Contributing
 
