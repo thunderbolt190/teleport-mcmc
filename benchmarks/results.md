@@ -134,3 +134,126 @@ flatten out by N=50-100 rather than continuing to rise sharply which is consiste
 diminishing-returns pattern already seen in Phase 1. These are single-seed results, so no error bars are
 established and the specific values here should not be compared numerically against
 the paper's own Figure 5.5, which uses a different target. 
+
+
+## Phase 2 - Paper Examples 5.2.1-5.2.3 (Lindsey et al. 2022)
+
+Date: 2026-08-19
+These notebooks follow the Gaussian-process examples in Section 5.2 of
+the paper. They reproduce the procedure, but will not be a numeric match to the paper’s tables and
+figures. Full code and plots:
+
+- [`notebooks/Example_5_2_1.ipynb`](../notebooks/Example_5_2_1.ipynb)
+- [`notebooks/Example_5_2_2.ipynb`](../notebooks/Example_5_2_2.ipynb)
+- [`notebooks/Example_5_2_3.ipynb`](../notebooks/Example_5_2_3.ipynb)
+
+---
+
+### 5.2.1 Univariate GP regression
+
+**Target:** Squared-exponential GP posterior on synthetic 1-D data,
+θ = (α, ρ, σ) with half-Cauchy priors and Gaussian noise
+integrated out in closed form.
+
+**Sampler:** full-interaction `teleporting_walkers_jax`.
+
+**What we ran:** acceptance and teleport probability vs ensemble size and the IAT of
+ensemble-averaged ρ vs ensemble size.
+
+#### Acceptance & teleport probability vs N
+
+Single-seed style check.
+
+| N    | Accept prob | Teleport prob |
+|------|-------------|---------------|
+| 1    | 0.126       | 0.000         |
+| 2    | 0.152       | 0.185         |
+| 5    | 0.233       | 0.720         |
+| 10   | 0.289       | 0.874         |
+| 20   | 0.344       | 0.945         |
+| 50   | 0.400       | 0.978         |
+| 100  | 0.474       | 0.986         |
+| 200  | 0.617       | 0.988         |
+| 500  | 0.836       | 0.996         |
+| 1000 | 0.944       | 0.998         |
+
+![Acceptance and teleport probability vs N (univariate GP)](results/example_521_accept_teleport_vs_ensemble_size.png)
+
+**Result:** Both rates increase with N and flatten at large ensemble
+size which is the same qualitative trend as the paper’s Figure 5.5. 
+
+#### IAT of ensemble-averaged ρ vs N
+
+| N  | Mean IAT | Std IAT |
+|----|----------|---------|
+| 1 | 361.846 | 229.679 |
+| 10 | 65.535 | 22.161 |
+| 50 | 19.348 | 7.409 |
+
+**Result:** IAT of ρ̄ decreases as N grows. Treat
+small-N estimates with caution when chains are shorter than ~50×τ.
+
+---
+
+### 5.2.2 Multivariate GP (n = 3)
+
+**Target:** Product-mean GP in 3-D inputs, metric parameterized via
+Bartlett / Cholesky factor Z, θ is 8-dimensional
+(α, c₁, c₂, c₃, z₂₁, z₃₁, z₃₂, σ) with the paper’s positivity and
+prior structure.
+
+**Sampler:** full-interaction teleporting.
+
+**What we ran:** IAT of ensemble-averaged c₁ vs N;, 2-D posterior
+marginals, overlaid 1-D c₁ marginals for several N.
+
+#### IAT of ensemble-averaged c₁ vs N
+
+| N   | Mean IAT | Std IAT |
+|-----|----------|---------|
+| 10  | 569.86   | 230.32  |
+| 20  | 306.11   | 142.38  |
+| 50  | 196.01   | 56.09   |
+| 100 | 125.31   | 5.30    |
+
+**Result:** IAT falls with N (Table 2 style trend). Small N values sometimes
+trigger emcee’s “chain shorter than 50×τ” warning; those entries are
+rough and should not be taken as exact values.
+
+#### Posterior marginals
+
+![z₂₁ vs c₁ (N = 100)](results/example_522_z21_vs_c1_posterior.png)
+
+![c₁ vs z₃₂ (N = 100)](results/example_522_c1_vs_z32_posterior.png)
+
+![c₁ marginal overlay for different ensemble sizes](results/example_522_c1_marginal_dist_vs_ensemble_size.png)
+
+**Result:** Mass is concentrated; larger N yields a more stable c₁
+marginal. Plots are not identical to the paper’s Figures 5.6–5.7 due to different synthetic data and seeds.
+
+---
+
+### 5.2.3 Non-Gaussian (Student-t) noise + restricted interaction
+
+**Target:** Same univariate mean structure as 5.2.1, but observation
+noise is Student-t (ν = 2). Latents are reparameterized as
+ε = y + K_θ^{1/2} w and state is (θ, w) = (α, ρ, σ, w₁, …, wₘ).
+
+**Sampler:** restricted interaction (notebook prototype, not a stable
+package API):
+
+- teleport / interact only on θ
+- 30 independent MH updates on w between θ steps
+- `vmap` over walkers for the w-block
+
+**What we ran:** correctness tests for the restricted teleporting algorithm, exploratory IAT of ρ̄ and 
+Figure 5.8-style (α, ρ) marginal at N = 60.
+
+#### Posterior marginal of (α, ρ)
+
+![α vs ρ (N = 60, Student-t noise)](results/example_523_alpha_vs_rho_posterior.png)
+
+**Result:** Restricted kernel runs end-to-end. The (α, ρ) marginal is
+concentrated with α, ρ > 0, consistent with the paper’s qualitative
+message that Student-t noise removes the strong multimodality seen in
+the Gaussian-noise univariate case.
