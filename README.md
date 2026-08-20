@@ -1,5 +1,5 @@
 # teleport-mcmc
-GPU-accelerated implementation of Ensemble Markov Chain Monte Carlo with Teleporting Walkers, written in JAX.
+JAX implementation of Ensemble Markov Chain Monte Carlo with Teleporting Walkers, written in JAX.
 
 ## About
 
@@ -47,11 +47,13 @@ final_walkers, chain, accepts, teleports = teleporting_walkers_jax(
 # teleports:     (n_steps,) bool, whether each accepted step was a teleport move
 ```
 
+
 ## Status
 
 - Core teleporting walkers algorithm, RWMH, and Goodman-Weare baseline
-  samplers implemented and tested (8 passing tests, see `tests/`)
-- Baseline correctness verified against known 2D Gaussian statistics;
+  samplers implemented and tested (8 passing tests, see
+  [`tests/`](tests/))
+- Baseline correctness (2D Gaussian) and experiment write-ups:
   see [`benchmarks/results.md`](benchmarks/results.md)
 - Double-well experiments:
   - IAT vs N - [`notebooks/03_iat_vs_doublewell.ipynb`](notebooks/03_iat_vs_doublewell.ipynb)
