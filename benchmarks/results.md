@@ -257,3 +257,95 @@ Figure 5.8-style (α, ρ) marginal at N = 60.
 concentrated with α, ρ > 0, consistent with the paper’s qualitative
 message that Student-t noise removes the strong multimodality seen in
 the Gaussian-noise univariate case.
+
+
+## Wall-clock cost vs sampling efficiency
+
+**Question:** The paper reports integrated autocorrelation time (IAT) which is the number of steps per
+effective sample. That is not the same as time per effective sample. The
+teleporting kernel builds an (N, N) weight matrix on every single-walker move
+(O(N^2)) while the stretch move is O(N). This measures whether the per-step
+cost gap between teleporting and GW reverses the mixing advantage as N grows and whether that depends on the hardware used. This experiment is not in the paper.
+
+**Setup:** Double-well target, dim=1. Find the median of 11 repeats at 500
+sweeps, with warm-up call being discarded so JIT compilation is excluded from the results,
+`block_until_ready` before the clock stops. Find the median IAT over 5 independent
+seeds at 5000 sweeps, via `emcee.autocorr.integrated_time` on the per-sweep
+ensemble-averaged coordinate. Teleporting step counts are multiplied by N so a
+sweep means N walker-moves for all three samplers. Run on Colab CPU
+(`CpuDevice`) and Colab T4 GPU (`CudaDevice`), x64 enabled, same seeds on both.
+Reproduce with `python benchmarks/benchmark_runtime.py`.
+
+### CPU (`CpuDevice(id=0)`)
+
+| N | sampler | ms/sweep | ms range | IAT median | IAT range | ms/eff sample | unreliable |
+|---|---|---|---|---|---|---|---|
+| 2 | teleporting | 0.0668 | 0.0542-0.0960 | 11.5 | 9.5-14.0 | 0.77 | - |
+| 2 | gw_parallel | 0.0079 | 0.0063-0.0081 | 72.1 | 39.2-119.6 | 0.57 | 1/5 |
+| 2 | gw_sequential | 0.0037 | 0.0036-0.0040 | 62.6 | 49.1-171.7 | 0.23 | 1/5 |
+| 5 | teleporting | 0.0773 | 0.0763-0.1231 | 5.2 | 4.0-6.3 | 0.40 | - |
+| 5 | gw_parallel | 0.0343 | 0.0314-0.0364 | 70.5 | 35.7-128.5 | 2.42 | 1/5 |
+| 5 | gw_sequential | 0.0134 | 0.0132-0.0141 | 34.8 | 19.5-74.7 | 0.47 | - |
+| 10 | teleporting | 0.2032 | 0.1949-0.3374 | 3.8 | 3.5-4.7 | 0.77 | - |
+| 10 | gw_parallel | 0.0330 | 0.0320-0.0759 | 40.7 | 30.0-63.2 | 1.34 | - |
+| 10 | gw_sequential | 0.0315 | 0.0314-0.0355 | 61.0 | 42.2-73.2 | 1.92 | - |
+| 20 | teleporting | 0.6621 | 0.6549-0.7280 | 3.2 | 2.8-3.4 | 2.09 | - |
+| 20 | gw_parallel | 0.0396 | 0.0390-0.0441 | 49.4 | 37.9-91.1 | 1.96 | - |
+| 20 | gw_sequential | 0.0659 | 0.0615-0.1118 | 39.7 | 34.7-62.4 | 2.62 | - |
+| 50 | teleporting | 3.2025 | 3.1308-5.5913 | 3.5 | 3.4-4.0 | 11.18 | - |
+| 50 | gw_parallel | 0.1108 | 0.0791-0.1167 | 48.4 | 33.7-61.8 | 5.36 | - |
+| 50 | gw_sequential | 0.1579 | 0.1554-0.1602 | 44.6 | 36.0-53.3 | 7.05 | - |
+
+### GPU (`CudaDevice(id=0)`, Colab T4)
+
+| N | sampler | ms/sweep | ms range | IAT median | IAT range | ms/eff sample | unreliable |
+|---|---|---|---|---|---|---|---|
+| 2 | teleporting | 0.1063 | 0.1059-0.1916 | 11.5 | 9.5-14.0 | 1.22 | - |
+| 2 | gw_parallel | 0.0305 | 0.0165-0.0306 | 72.1 | 39.2-119.6 | 2.20 | 1/5 |
+| 2 | gw_sequential | 0.0391 | 0.0385-0.0392 | 62.6 | 49.1-171.7 | 2.45 | 1/5 |
+| 5 | teleporting | 0.3629 | 0.3627-0.3874 | 5.2 | 4.0-6.3 | 1.87 | - |
+| 5 | gw_parallel | 0.0166 | 0.0165-0.0167 | 43.3 | 30.6-67.1 | 0.72 | - |
+| 5 | gw_sequential | 0.0779 | 0.0777-0.0785 | 59.1 | 45.7-72.4 | 4.60 | - |
+| 10 | teleporting | 0.8137 | 0.8128-0.8148 | 3.8 | 3.5-4.7 | 3.09 | - |
+| 10 | gw_parallel | 0.0176 | 0.0175-0.0178 | 37.8 | 29.7-65.0 | 0.66 | - |
+| 10 | gw_sequential | 0.1528 | 0.1525-0.1537 | 48.6 | 41.1-69.8 | 7.43 | - |
+| 20 | teleporting | 1.8748 | 1.8737-1.8752 | 3.2 | 2.8-3.4 | 5.91 | - |
+| 20 | gw_parallel | 0.0156 | 0.0153-0.0157 | 44.1 | 34.1-83.0 | 0.69 | - |
+| 20 | gw_sequential | 0.3023 | 0.3006-0.3048 | 45.6 | 25.2-75.2 | 13.78 | - |
+| 50 | teleporting | 4.8032 | 4.8013-4.8057 | 3.5 | 3.4-4.0 | 16.77 | - |
+| 50 | gw_parallel | 0.0377 | 0.0200-0.0381 | 47.6 | 27.1-55.3 | 1.79 | - |
+| 50 | gw_sequential | 0.7485 | 0.7402-0.7505 | 38.9 | 31.7-80.1 | 29.09 | - |
+
+**Findings:**
+
+- Mixing (device-independent, as expected). Teleporting reaches IAT ~3.5 at
+  N=50 against ~48 for GW, roughly 14x fewer sweeps per effective sample and is more consistent across seeds (3.4-4.0 vs 33.7-61.8). Teleporting's IAT is
+  identical on both devices, showing that the samplers themselves are unaffected
+  by hardware.
+- Cost does not improve on GPU. Teleporting's per-sweep cost grows ~48x from
+  N=2 to N=50 on CPU and ~45x on GPU. The scaling is essentially unchanged. If
+  the O(N^2) importance-weight matrix were the bottleneck, a GPU should have
+  flattened this curve but it did not.
+- The bottleneck is sequential depth, not arithmetic width. One teleporting
+  step moves a single walker, so covering S sweeps at ensemble size N requires
+  S*N dependent `lax.scan` iterations (250,000 at N=50, S=5000). One GW step
+  updates all N walkers at once via `vmap`, requiring only S iterations. No
+  amount of parallel hardware helps a chain of dependent steps. Consistent with
+  this, moving to GPU made teleporting slower (3.20 -> 4.80 ms/sweep at N=50) while GW parallel got ~3x *faster*
+  (0.111 -> 0.038 ms/sweep), since its work is genuinely wide.
+- Net. At N=50, teleporting costs ~2.1x more wall-clock time per effective
+  sample than GW parallel on CPU, and ~9.4x more on GPU (16.77 vs 1.79 ms),
+  despite mixing ~14x better. Lower IAT does not translate into faster sampling
+  here, and the gap widens on hardware that favors wide parallel work.
+
+**Limitations:**
+
+- Single target (1D double-well). No claim is made about the Section 5.2 GP
+  regression posteriors, where per-step likelihood cost is much higher and may
+  dominate the differences measured here.
+- 5 seeds only. The GW IAT ranges are wide, and three estimates at N=2 and N=5
+  were flagged unreliable (chain shorter than 50x tau). Those flagged upper
+  bounds (119.6, 171.7, 128.5) should be read as a minimum value rather than as
+  measurements.
+- The benchmark was only on small ensembles in one dimension. At larger N or higher dimension the O(N^2)
+  term may become significant enough to change the results.
