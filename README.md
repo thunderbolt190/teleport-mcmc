@@ -1,5 +1,5 @@
 # teleport-mcmc
-JAX implementation of Ensemble Markov Chain Monte Carlo with Teleporting Walkers, written in JAX.
+JAX implementation of Ensemble Markov Chain Monte Carlo with Teleporting Walkers.
 
 ## About
 
@@ -16,6 +16,28 @@ Carlo with Teleporting Walkers." *SIAM/ASA Journal on Uncertainty
 Quantification*, 10(3), 860–885.
 [arXiv:2106.02686](https://arxiv.org/abs/2106.02686)
 
+## Results
+
+- Reproduces the paper's Section 5.2 Gaussian process regression
+  experiments (univariate, multivariate, and Student-t noise with
+  restricted interaction). The trends match the paper qualitatively but the
+  numbers are not a direct reproduction, since the synthetic data and
+  seeds differ.
+- On a bimodal double-well target, teleporting reaches roughly 14x lower
+  integrated autocorrelation time (IAT) than Goodman-Weare and does so
+  more consistently across seeds.
+- Lower IAT does not always mean faster sampling.
+  Teleporting costs about 2x more wall-clock time per effective sample
+  than Goodman-Weare on CPU and about 9x more on GPU, despite its large
+  mixing advantage. The cause of this appears to be sequential depth rather than
+  arithmetic cost. One teleporting step moves a single walker, so
+  covering the same number of sweeps requires N times more dependent
+  scan iterations than Goodman-Weare, which updates all N walkers at
+  once. This experiment is not in the paper.
+
+Full numbers, methodology, and caveats:
+[`benchmarks/results.md`](benchmarks/results.md).
+
 ## Installation
 
 ```bash
@@ -26,7 +48,8 @@ pip install -e ".[dev,benchmarks]"
 
 `dev` includes testing tools (pytest); `benchmarks` includes emcee,
 matplotlib, and numpy, needed to run the experiment notebooks under
-`notebooks/` (double-well studies and paper Examples 5.2.1–5.2.3).
+`notebooks/` (double-well studies and paper Examples 5.2.1–5.2.3) and
+the scripts under `benchmarks/`.
 
 ## Usage
 
@@ -64,6 +87,8 @@ final_walkers, chain, accepts, teleports = teleporting_walkers_jax(
   - 5.2.2 Multivariate GP - [`notebooks/Example_5_2_2.ipynb`](notebooks/Example_5_2_2.ipynb)
   - 5.2.3 Non-Gaussian (Student-t) noise / restricted interaction -
     [`notebooks/Example_5_2_3.ipynb`](notebooks/Example_5_2_3.ipynb)
+- Wall-clock cost vs sampling efficiency (CPU and GPU) -
+    [`benchmarks/benchmark_runtime.py`](benchmarks/benchmark_runtime.py)
 
 Further work is tracked in
 [GitHub Issues](https://github.com/thunderbolt190/teleport-mcmc/issues).
