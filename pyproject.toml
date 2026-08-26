@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "teleport-mcmc"
 version = "0.1.0"
-description = "GPU-accelerated ensemble MCMC with teleporting walkers in JAX"
+description = "JAX implementation of ensemble MCMC with teleporting walkers"
 readme = "README.md"
 license = {file = "LICENSE"}
 requires-python = ">=3.10"
